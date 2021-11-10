@@ -63,6 +63,12 @@ class RatingController extends APIController
       return $this->response();
     }
 
+    public function retrieveById(Request $request){
+      $data = $request->all();
+      $this->retrieveDB($data);
+      return $this->response();
+    }
+
     public function checkAccountExist($accountId, $payload, $payloadValue){
       $result = Rating::where('account_id', '=', $accountId)
       ->where('payload', '=', $payload)
@@ -107,5 +113,10 @@ class RatingController extends APIController
         ->where('payload_value_1', '=', $payloadValue1)
         ->get();
       return sizeof($rating) > 0 ? $rating[0]['value'] : null;
+    }
+    
+    public function getRatingByParams($column, $value){
+      $rating = Rating::where($column, '=', $value)->get();
+      return sizeof($rating) > 0 ? $rating : [];
     }
 }
